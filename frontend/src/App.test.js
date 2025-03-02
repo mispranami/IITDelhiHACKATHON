@@ -1,8 +1,8 @@
-import { render, screen } from '@testing-library/react';
-import App from '../../src/App';
+import { render, screen } from "@testing-library/react";
+import App from "./App";  // Correct import
 
-test('renders learn react link', () => {
+test("renders Hive News Platform heading", () => {
   render(<App />);
-  const linkElement = screen.getByText(/learn react/i);
-  expect(linkElement).toBeInTheDocument();
+  const headingElement = screen.getByText(/Hive News Platform/i);
+  expect(headingElement).toBeInTheDocument();
 });
