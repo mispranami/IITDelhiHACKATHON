@@ -1,32 +1,49 @@
 import React, { useState } from "react";
-import { client } from "../config/hiveConfig";
 
 const FactCheck = () => {
-    const [query, setQuery] = useState("");
-    const [result, setResult] = useState(null);
+    const [username, setUsername] = useState("");
+    const [postPermlink, setPostPermlink] = useState("");
+    const [reportContent, setReportContent] = useState("");
 
-    const checkFact = async () => {
-        if (!query.trim()) return;
-        try {
-            // Simulating fact-checking logic (Replace with actual API)
-            const fakeResponse = { verdict: Math.random() > 0.5 ? "True" : "False" };
-            setResult(fakeResponse.verdict);
-        } catch (error) {
-            console.error("Error fetching fact-check:", error);
-            setResult("Error checking fact.");
-        }
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        
+        const response = await fetch("http://localhost:3000/submit-report", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ username, post_permlink: postPermlink, report_content: reportContent }),
+        });
+        
+        const data = await response.json();
+        alert(data.message);
     };
 
     return (
-        <div className="fact-check">
-            <h2>Fact Check</h2>
-            <textarea
-                placeholder="Enter news to check..."
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-            />
-            <button onClick={checkFact}>Check</button>
-            {result && <p>Verdict: {result}</p>}
+        <div>
+            <h2>Fact-Check a News Post</h2>
+            <form onSubmit={handleSubmit}>
+                <input
+                    type="text"
+                    placeholder="Your Hive username"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                    required
+                />
+                <input
+                    type="text"
+                    placeholder="Post Permlink"
+                    value={postPermlink}
+                    onChange={(e) => setPostPermlink(e.target.value)}
+                    required
+                />
+                <textarea
+                    placeholder="Enter fact-checking report"
+                    value={reportContent}
+                    onChange={(e) => setReportContent(e.target.value)}
+                    required
+                ></textarea>
+                <button type="submit">Submit Report</button>
+            </form>
         </div>
     );
 };

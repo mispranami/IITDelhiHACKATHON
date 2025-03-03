@@ -5,19 +5,15 @@ const Login = ({ onLogin }) => {
 
     const handleLogin = async () => {
         if (!username) return alert("Enter your Hive username.");
-        if (username.length < 3) return alert("Username must be at least 3 characters long.");
-
-        try {
-            onLogin(username);
-        } catch (error) {
-            console.error("Login failed:", error);
-            alert("Login failed. Please try again.");
-        }
+        
+        // Redirect user to HiveSigner authentication
+        const redirectUri = encodeURIComponent(window.location.origin);
+        window.location.href = `https://hivesigner.com/oauth2/authorize?client_id=your_client_id&redirect_uri=${redirectUri}&scope=posting`;
     };
 
     return (
         <div className="login">
-            <h2>Login with Hive</h2>
+            <h2>Login with HiveSigner</h2>
             <input
                 type="text"
                 placeholder="Enter Hive username"

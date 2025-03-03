@@ -1,21 +1,56 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import hivesigner from "hivesigner";
 import Login from "./components/Login";
 import NewsFeed from "./components/NewsFeed";
 import SubmitNews from "./components/SubmitNews";
 import FactCheck from "./components/FactCheck";
 import "./styles/App.css";
 
+const client = new hivesigner.Client({
+    app: "", // No need to specify an app name
+    callbackURL: "http://localhost:3000", // Change this for production
+    scope: ["login", "vote", "comment"], // Permissions
+});
+
 const App = () => {
     const [username, setUsername] = useState(null);
+
+    // Check for access token in URL (after HiveSigner login)
+    useEffect(() => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const accessToken = urlParams.get("access_token");
+
+        if (accessToken) {
+            client.me(accessToken, (err, res) => {
+                if (res && res.user) {
+                    setUsername(res.user); // Set the logged-in username
+                    window.history.replaceState({}, document.title, "/"); // Remove access token from URL
+                }
+            });
+        }
+    }, []);
+
+    const handleLogin = () => {
+        window.location.href = client.getLoginURL(); // Redirect to HiveSigner login
+    };
+
+    const handleLogout = () => {
+        setUsername(null);
+    };
 
     return (
         <div className="App">
             <h1>Decentralized News & Fact-Checking</h1>
-            {!username ? <Login onLogin={setUsername} /> : <>
-                <SubmitNews username={username} />
-                <FactCheck />
-                <NewsFeed />
-            </>}
+            {!username ? (
+                <Login onLogin={handleLogin} />
+            ) : (
+                <>
+                    <p>Welcome, {username}! <button onClick={handleLogout}>Logout</button></p>
+                    <SubmitNews username={username} />
+                    <FactCheck username={username} />
+                    <NewsFeed />
+                </>
+            )}
         </div>
     );
 };

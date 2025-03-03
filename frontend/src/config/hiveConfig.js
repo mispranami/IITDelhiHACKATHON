@@ -1,7 +1,9 @@
-import { Client } from "@hiveio/dhive";
+import hivesigner from "hivesigner";
 
-// Ensure @hiveio/dhive is properly installed
-const client = new Client("https://api.hive.blog");
+const client = new hivesigner.Client({
+    app: "", // No need to register an app
+    callbackURL: "http://localhost:3000", // Change when deployed
+    scope: ["login", "vote", "comment", "post"],
+});
 
-// Use named export instead of default export
 export { client };
