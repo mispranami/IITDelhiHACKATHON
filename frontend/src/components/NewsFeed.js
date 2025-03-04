@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { client } from "../config/hiveConfig";
+import client from "../config/hiveConfig";  
+
 
 
 const NewsFeed = () => {

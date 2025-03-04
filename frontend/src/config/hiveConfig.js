@@ -1,9 +1,9 @@
 import hivesigner from "hivesigner";
 
 const client = new hivesigner.Client({
-    app: "", // No need to register an app
-    callbackURL: "http://localhost:3000", // Change when deployed
-    scope: ["login", "vote", "comment", "post"],
+    app: "",
+    callbackURL: "http://localhost:3000", // Change this for production
+    scope: ["login", "vote", "comment"],
 });
 
-export { client };
+export default client;

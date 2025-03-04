@@ -1,16 +1,10 @@
 import React, { useState, useEffect } from "react";
-import hivesigner from "hivesigner";
+import client from "./config/hiveConfig";  // Import client instead of redeclaring
 import Login from "./components/Login";
 import NewsFeed from "./components/NewsFeed";
 import SubmitNews from "./components/SubmitNews";
 import FactCheck from "./components/FactCheck";
 import "./styles/App.css";
-
-const client = new hivesigner.Client({
-    app: "", // No need to specify an app name
-    callbackURL: "http://localhost:3000", // Change this for production
-    scope: ["login", "vote", "comment"], // Permissions
-});
 
 const App = () => {
     const [username, setUsername] = useState(null);
